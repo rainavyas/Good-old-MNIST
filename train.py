@@ -40,7 +40,7 @@ y_dev = y[training_size:]
 X_train = torch.FloatTensor(X_train)
 X_dev = torch.FloatTensor(X_dev)
 y_train = torch.FloatTensor(y_train)
-y_dev = torch.FloatTensor(y_dev)
+#y_dev = torch.FloatTensor(y_dev)
 
 # Reshape input tensors into images
 X_train = torch.reshape(X_train, (-1, IMG_DIM, IMG_DIM))
@@ -65,5 +65,27 @@ my_model = my_model.float()
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(my_model.parameters(), lr=lr)
 
+# pass through model
+for epoch in range(epochs):
+    my_model.train()
 
-# Pass through model 
+    for xb, yb in train_dl:
+        y_pred = my_model.forward(xb)
+        # Compute cross entropy loss
+        loss = criterion(y_pred, yb)
+
+        # Zero gradients, backward pass, update weights
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    # Report accuracy on the dev set
+    y_dev_pred_likelihoods = my_model.forward(X_dev)
+    y_dev_pred = torch.argmax(y_dev_pred_likelihoods, dim = 1)
+    y_dev_pred_list = y_dev_pred.tolist()
+    for real, pred in zip(y_dev, y_dev_pred):
+        total+=1
+        if int(y_dev) == y_dev_pred:
+            correct +=1
+    acc = correct/total
+    print("Epoch: ", epoch, "Dev Accuracy: ", acc)
