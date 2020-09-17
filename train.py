@@ -96,3 +96,7 @@ for epoch in range(epochs):
     acc = correct/total
 
     print("Epoch: ", epoch, "Dev Accuracy: ", acc)
+
+    # Save the trained model
+    file_name = "Simple_DNN.pt"
+    torch.save(my_model, file_name)
