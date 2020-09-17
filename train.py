@@ -50,7 +50,7 @@ X_dev = torch.reshape(X_dev, (-1, IMG_DIM, IMG_DIM))
 
 # Mini-batch size
 bs = 100
-epochs = 80
+epochs = 45
 lr = 1e-3
 
 # Store all training dataset in a single wrapped tensor
