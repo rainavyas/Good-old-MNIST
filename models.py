@@ -2,7 +2,7 @@ import torch
 
 
 class Basic_two_layer(torch.nn.Module):
-    # This doesn't train at all
+    # This doesn't train well
     def __init__(self, image_size, num_digits):
 
         super(Basic_two_layer, self).__init__()
@@ -19,9 +19,9 @@ class Basic_two_layer(torch.nn.Module):
         return y_out
 
 # Make new simpler model that converts to a single 28^2 vector and passes through layers
-class simple_DNN(torch.nn.Module):
+class Simple_DNN(torch.nn.Module):
     def __init__(self, image_size, num_digits):
-        super(simple_DNN, self).__init__()
+        super(Simple_DNN, self).__init__()
         self.layer1 = torch.nn.Linear(image_size**2, 200)
         self.layer2 = torch.nn.Linear(200, num_digits)
         self.image_size = image_size

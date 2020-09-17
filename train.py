@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 import csv
-from models import Simple_DNN
+from models import Simple_DNN, Basic_two_layer
 
 IMG_DIM = 28
 
@@ -45,13 +45,13 @@ y_train = torch.LongTensor(y_train)
 
 # Reshape input tensors into images
 X_train = torch.reshape(X_train, (-1, IMG_DIM, IMG_DIM))
-X_dev = torch.reshape(X_train, (-1, IMG_DIM, IMG_DIM))
+X_dev = torch.reshape(X_dev, (-1, IMG_DIM, IMG_DIM))
 
 
 # Mini-batch size
 bs = 100
 epochs = 80
-lr = 1e-2
+lr = 1e-3
 
 # Store all training dataset in a single wrapped tensor
 train_ds = TensorDataset(X_train, y_train)
@@ -61,6 +61,7 @@ train_dl = DataLoader(train_ds, batch_size = bs, shuffle = True)
 
 # Construct model
 my_model = Simple_DNN(IMG_DIM, 10)
+#my_model = Basic_two_layer(IMG_DIM, 10)
 my_model = my_model.float()
 
 criterion = torch.nn.CrossEntropyLoss()
