@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 import csv
-from models import Basic_two_layer
+from models import Simple_DNN
 
 IMG_DIM = 28
 
@@ -36,10 +36,11 @@ X_dev = X[training_size:]
 y_train = y[:training_size]
 y_dev = y[training_size:]
 
+
 # Convert to tensors
 X_train = torch.FloatTensor(X_train)
 X_dev = torch.FloatTensor(X_dev)
-y_train = torch.FloatTensor(y_train)
+y_train = torch.LongTensor(y_train)
 #y_dev = torch.FloatTensor(y_dev)
 
 # Reshape input tensors into images
@@ -49,17 +50,17 @@ X_dev = torch.reshape(X_train, (-1, IMG_DIM, IMG_DIM))
 
 # Mini-batch size
 bs = 100
-epochs = 8
-lr = 1e-1
+epochs = 80
+lr = 1e-2
 
 # Store all training dataset in a single wrapped tensor
-train_ds = TensorDataset(X, y_train)
+train_ds = TensorDataset(X_train, y_train)
 
 # Use DataLoader to handle minibatches easily
 train_dl = DataLoader(train_ds, batch_size = bs, shuffle = True)
 
 # Construct model
-my_model = Basic_two_layer(IMG_DIM, 10)
+my_model = Simple_DNN(IMG_DIM, 10)
 my_model = my_model.float()
 
 criterion = torch.nn.CrossEntropyLoss()
@@ -79,13 +80,18 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
 
+    print("loss:", loss.item())
     # Report accuracy on the dev set
     y_dev_pred_likelihoods = my_model.forward(X_dev)
     y_dev_pred = torch.argmax(y_dev_pred_likelihoods, dim = 1)
     y_dev_pred_list = y_dev_pred.tolist()
-    for real, pred in zip(y_dev, y_dev_pred):
+    total = 0
+    correct = 0
+    for real, pred in zip(y_dev, y_dev_pred_list):
         total+=1
-        if int(y_dev) == y_dev_pred:
+        diff = real - pred
+        if abs(diff) < 0.1:
             correct +=1
     acc = correct/total
+
     print("Epoch: ", epoch, "Dev Accuracy: ", acc)
