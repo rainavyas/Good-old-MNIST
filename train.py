@@ -7,7 +7,7 @@ from models import Simple_DNN, Basic_two_layer, Simple_CNN
 IMG_DIM = 28
 
 # Set seed for reproducibility
-seed = 1
+seed = 5
 torch.manual_seed(seed)
 
 # Read in Data
@@ -99,5 +99,5 @@ for epoch in range(epochs):
     print("Epoch: ", epoch, "Dev Accuracy: ", acc)
 
     # Save the trained model
-    file_name = "Simple_CNN.pt"
+    file_name = "Simple_CNN_seed"+str(seed)+".pt"
     torch.save(my_model, file_name)
