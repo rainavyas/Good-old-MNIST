@@ -35,3 +35,27 @@ class Simple_DNN(torch.nn.Module):
         h2 = self.layer2(h1_nonlinear)
         # Return unnormalised probabilities as loss function of cross entropy includes softmax
         return h2
+
+class Simple_CNN(torch.nn.Module):
+    def __init__(self):
+        super(Simple_CNN, self).__init__()
+        self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, stride=1, padding=1)
+        self.pool = torch.nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
+
+        # image dimension is 28, stride =2 => 28/2=14
+        self.fc1 = torch.nn.Linear(8*14*14, 50)
+        # 10 output classes
+        self.fc2 = torch.nn.Linear(50, 10)
+
+    def forward(self, X):
+        # Reshape to have single channel
+        x = X.unsqueeze(1)
+        x_conv1 = self.conv1(x)
+        relu = torch.nn.ReLU()
+        x_act = relu(x_conv1)
+        x_pooled = self.pool(x_act)
+        x_pooled_reshaped = x_pooled.reshape(-1, 8*14*14)
+        x_fc1 = self.fc1(x_pooled_reshaped)
+        x_fc1_act = relu(x_fc1)
+        y = self.fc2(x_fc1_act)
+        return y

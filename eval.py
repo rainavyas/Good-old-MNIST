@@ -38,9 +38,9 @@ y = y.tolist()
 # Write to csv file
 file_name = "Simple_DNN_test_output.csv"
 with open(file_name, 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
     # Write header
-    writer.writerow(['ImageId'] + ['Label'])
+    writer.writerow(['ImageId', 'Label'])
     for id, pred in enumerate(y):
-        writer.writerow([id] + [pred])
+        writer.writerow([id+1 , pred])

@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 import csv
-from models import Simple_DNN, Basic_two_layer
+from models import Simple_DNN, Basic_two_layer, Simple_CNN
 
 IMG_DIM = 28
 
@@ -60,8 +60,9 @@ train_ds = TensorDataset(X_train, y_train)
 train_dl = DataLoader(train_ds, batch_size = bs, shuffle = True)
 
 # Construct model
-my_model = Simple_DNN(IMG_DIM, 10)
+#my_model = Simple_DNN(IMG_DIM, 10)
 #my_model = Basic_two_layer(IMG_DIM, 10)
+my_model = Simple_CNN()
 my_model = my_model.float()
 
 criterion = torch.nn.CrossEntropyLoss()
@@ -98,5 +99,5 @@ for epoch in range(epochs):
     print("Epoch: ", epoch, "Dev Accuracy: ", acc)
 
     # Save the trained model
-    file_name = "Simple_DNN.pt"
+    file_name = "Simple_CNN.pt"
     torch.save(my_model, file_name)
